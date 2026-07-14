@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Survey Access</title>
+<title>File Access</title>
 
 <style>
 body {
@@ -40,44 +40,58 @@ button {
 
 <h2>الوصول إلى الملف</h2>
 
-<p id="text">يرجى تعبئة الاستبيان للحصول على الملف</p>
+<p>يرجى تعبئة الاستبيان للحصول على الملف</p>
 
-<button id="btn" onclick="openForm()">ابدأ الاستبيان</button>
+<button onclick="openForm()">ابدأ الاستبيان</button>
 
 </div>
 
 
 <script>
 
-const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSfMnfkxshEeDFS-l3kaJzx_HcrVk5DQwqmDuzPT5hpHTapNnA/viewform?usp=sharing&ouid=113482101584299063567";
+const formLink = "ضع رابط الفورم هنا";
 
-const fileLink = "https://www.memr.gov.jo/En/NewsDetails/The_Ministry_of_Energy_and_mineral_resources__launches_a_platform_for_investment_opportunities_in_mineral_resources_oil_gas_and_oil_shale";
+const fileAPI = "https://script.google.com/macros/s/AKfycbwSDrvxaVfmSRf3-dmvTekjjvghJmzIpQ4ZYEQhayhVxTmi7Bi3y3nqIzgiXEjiyVvp/exec";
+
+let fileLink = "";
 
 const daysLimit = 7;
 
 
-// إذا رجع المستخدم بعد إرسال الفورم
+// جلب رابط الملف من Google Sheet
+
+fetch(fileAPI)
+.then(response => response.json())
+.then(data => {
+  fileLink = data.fileLink;
+});
+
+
+// إذا عاد المستخدم بعد إرسال الفورم
+
 const urlParams = new URLSearchParams(window.location.search);
 
 if (urlParams.get("done") === "true") {
 
   localStorage.setItem("survey_completed", new Date());
 
-  window.location.href = fileLink;
+  setTimeout(() => {
+    window.location.href = fileLink;
+  }, 500);
 
 }
 
 
-// فحص إذا سبق تعبئة خلال 7 أيام
+// فحص مدة 7 أيام
 
 let completed = localStorage.getItem("survey_completed");
 
-if(completed){
+if (completed && fileLink) {
 
   let lastDate = new Date(completed);
   let now = new Date();
 
-  let diff = (now - lastDate) / (1000*60*60*24);
+  let diff = (now - lastDate) / (1000 * 60 * 60 * 24);
 
   if(diff < daysLimit){
 
@@ -87,6 +101,8 @@ if(completed){
 
 }
 
+
+// فتح الاستبيان
 
 function openForm(){
 
@@ -98,5 +114,3 @@ function openForm(){
 
 </body>
 </html>
-
-
