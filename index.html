@@ -3,110 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <title>File Access</title>
-
-<style>
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding-top: 80px;
-  background: #f5f5f5;
-}
-
-.container {
-  background: white;
-  width: 90%;
-  max-width: 500px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 15px;
-}
-
-button {
-  background: #1a73e8;
-  color: white;
-  border: none;
-  padding: 15px 35px;
-  font-size: 18px;
-  border-radius: 8px;
-}
-</style>
-
 </head>
 
-<body>
-
-<div class="container">
+<body style="text-align:center;padding-top:80px;font-family:Arial">
 
 <h2>الوصول إلى الملف</h2>
 
-<p>يرجى تعبئة الاستبيان للحصول على الملف</p>
+<p>يرجى تعبئة الاستبيان</p>
 
-<button onclick="openForm()">ابدأ الاستبيان</button>
-
-</div>
-
+<button onclick="startSurvey()">
+ابدأ الاستبيان
+</button>
 
 <script>
 
 const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSfMnfkxshEeDFS-l3kaJzx_HcrVk5DQwqmDuzPT5hpHTapNnA/viewform?usp=sharing&ouid=113482101584299063567";
 
-const fileAPI = "https://script.google.com/macros/s/AKfycbwSDrvxaVfmSRf3-dmvTekjjvghJmzIpQ4ZYEQhayhVxTmi7Bi3y3nqIzgiXEjiyVvp/exec";
+const fileLink = "https://www.memr.gov.jo/En/NewsDetails/The_Ministry_of_Energy_and_mineral_resources__launches_a_platform_for_investment_opportunities_in_mineral_resources_oil_gas_and_oil_shale";
 
-const daysLimit = 7;
-
-
-async function startSystem(){
-
-  let response = await fetch(fileAPI);
-  let data = await response.json();
-
-  let fileLink = data.fileLink;
+const days = 7;
 
 
-  // إذا رجع بعد تعبئة الفورم
-  const params = new URLSearchParams(window.location.search);
-
-  if(params.get("done") === "true"){
-
-    localStorage.setItem("survey_completed", new Date());
-
-    window.location.href = fileLink;
-    return;
-
-  }
+let done = localStorage.getItem("survey_date");
 
 
-  // فحص آخر تعبئة
+if(done){
 
-  let completed = localStorage.getItem("survey_completed");
+ let old = new Date(done);
+ let now = new Date();
 
-  if(completed){
+ let diff = (now-old)/(1000*60*60*24);
 
-    let last = new Date(completed);
-    let now = new Date();
+ if(diff < days){
 
-    let diff = (now-last)/(1000*60*60*24);
+  window.location.href = fileLink;
 
-    if(diff < daysLimit){
-
-      window.location.href = fileLink;
-      return;
-
-    }
-
-  }
+ }
 
 }
 
 
-function openForm(){
+function startSurvey(){
 
-  window.location.href = formLink;
+ localStorage.setItem("survey_date", new Date());
+
+ window.location.href = formLink;
 
 }
-
-
-startSystem();
 
 </script>
 
