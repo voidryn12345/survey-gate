@@ -2,19 +2,37 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Download File</title>
+<title>Survey Access</title>
 
 <style>
 body {
   font-family: Arial, sans-serif;
   text-align: center;
   padding-top: 80px;
+  background: #f5f5f5;
+}
+
+.container {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 15px;
 }
 
 button {
-  padding: 15px 30px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 15px 35px;
   font-size: 18px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
 }
 </style>
 
@@ -22,15 +40,20 @@ button {
 
 <body>
 
+<div class="container">
+
 <h2>الوصول إلى الملف</h2>
 
-<p id="message"></p>
+<p>يرجى تعبئة الاستبيان للحصول على الملف</p>
 
-<button id="openForm" onclick="openForm()">ابدأ الاستبيان</button>
+<button onclick="openForm()">ابدأ الاستبيان</button>
+
+</div>
+
 
 <script>
 
-const formLink = "https://forms.gle/1xkv4Q7vG2eqHF7r5";
+const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSfMnfkxshEeDFS-l3kaJzx_HcrVk5DQwqmDuzPT5hpHTapNnA/viewform?usp=sharing&ouid=113482101584299063567";
 
 const fileLink = "https://www.facebook.com";
 
@@ -46,14 +69,11 @@ function checkUser(){
     let lastDate = new Date(completed);
     let today = new Date();
 
-    let diff = (today - lastDate) / (1000 * 60 * 60 * 24);
+    let diff = (today - lastDate) / (1000*60*60*24);
 
     if(diff < daysLimit){
-
       window.location.href = fileLink;
-
     }
-
   }
 
 }
