@@ -2,18 +2,50 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>File Access</title>
+<title>Survey Access</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 80px;
+  background: #f5f5f5;
+}
+
+.container {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+button {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 15px 35px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+</style>
+
 </head>
 
-<body style="text-align:center;padding-top:80px;font-family:Arial">
+<body>
+
+<div class="container">
 
 <h2>الوصول إلى الملف</h2>
 
-<p>يرجى تعبئة الاستبيان</p>
+<p id="text">يرجى تعبئة الاستبيان للحصول على الملف</p>
 
-<button onclick="startSurvey()">
-ابدأ الاستبيان
-</button>
+<button id="btn" onclick="openForm()">ابدأ الاستبيان</button>
+
+</div>
+
 
 <script>
 
@@ -21,33 +53,44 @@ const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSfMnfkxshEeDFS-l3kaJz
 
 const fileLink = "https://www.memr.gov.jo/En/NewsDetails/The_Ministry_of_Energy_and_mineral_resources__launches_a_platform_for_investment_opportunities_in_mineral_resources_oil_gas_and_oil_shale";
 
-const days = 7;
+const daysLimit = 7;
 
 
-let done = localStorage.getItem("survey_date");
+// إذا رجع المستخدم بعد إرسال الفورم
+const urlParams = new URLSearchParams(window.location.search);
 
+if (urlParams.get("done") === "true") {
 
-if(done){
-
- let old = new Date(done);
- let now = new Date();
-
- let diff = (now-old)/(1000*60*60*24);
-
- if(diff < days){
+  localStorage.setItem("survey_completed", new Date());
 
   window.location.href = fileLink;
-
- }
 
 }
 
 
-function startSurvey(){
+// فحص إذا سبق تعبئة خلال 7 أيام
 
- localStorage.setItem("survey_date", new Date());
+let completed = localStorage.getItem("survey_completed");
 
- window.location.href = formLink;
+if(completed){
+
+  let lastDate = new Date(completed);
+  let now = new Date();
+
+  let diff = (now - lastDate) / (1000*60*60*24);
+
+  if(diff < daysLimit){
+
+    window.location.href = fileLink;
+
+  }
+
+}
+
+
+function openForm(){
+
+  window.location.href = formLink;
 
 }
 
