@@ -30,10 +30,6 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
-
-button:hover {
-  opacity: 0.9;
-}
 </style>
 
 </head>
@@ -44,9 +40,9 @@ button:hover {
 
 <h2>الوصول إلى الملف</h2>
 
-<p>يرجى تعبئة الاستبيان للحصول على الملف</p>
+<p id="text">يرجى تعبئة الاستبيان للحصول على الملف</p>
 
-<button onclick="openForm()">ابدأ الاستبيان</button>
+<button id="btn" onclick="openForm()">ابدأ الاستبيان</button>
 
 </div>
 
@@ -55,25 +51,38 @@ button:hover {
 
 const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSfMnfkxshEeDFS-l3kaJzx_HcrVk5DQwqmDuzPT5hpHTapNnA/viewform?usp=sharing&ouid=113482101584299063567";
 
-const fileLink = "https://www.facebook.com";
+const fileLink = "https://www.memr.gov.jo/En/NewsDetails/The_Ministry_of_Energy_and_mineral_resources__launches_a_platform_for_investment_opportunities_in_mineral_resources_oil_gas_and_oil_shale";
 
 const daysLimit = 7;
 
 
-function checkUser(){
+// إذا رجع المستخدم بعد إرسال الفورم
+const urlParams = new URLSearchParams(window.location.search);
 
-  let completed = localStorage.getItem("survey_completed");
+if (urlParams.get("done") === "true") {
 
-  if(completed){
+  localStorage.setItem("survey_completed", new Date());
 
-    let lastDate = new Date(completed);
-    let today = new Date();
+  window.location.href = fileLink;
 
-    let diff = (today - lastDate) / (1000*60*60*24);
+}
 
-    if(diff < daysLimit){
-      window.location.href = fileLink;
-    }
+
+// فحص إذا سبق تعبئة خلال 7 أيام
+
+let completed = localStorage.getItem("survey_completed");
+
+if(completed){
+
+  let lastDate = new Date(completed);
+  let now = new Date();
+
+  let diff = (now - lastDate) / (1000*60*60*24);
+
+  if(diff < daysLimit){
+
+    window.location.href = fileLink;
+
   }
 
 }
@@ -81,16 +90,13 @@ function checkUser(){
 
 function openForm(){
 
-  localStorage.setItem("survey_completed", new Date());
-
   window.location.href = formLink;
 
 }
-
-
-checkUser();
 
 </script>
 
 </body>
 </html>
+
+
