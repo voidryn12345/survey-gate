@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Download File</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 80px;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 18px;
+  cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>الوصول إلى الملف</h2>
+
+<p id="message"></p>
+
+<button id="openForm" onclick="openForm()">ابدأ الاستبيان</button>
+
+<script>
+
+const formLink = "https://forms.gle/1xkv4Q7vG2eqHF7r5";
+
+const fileLink = "https://www.facebook.com";
+
+const daysLimit = 7;
+
+
+function checkUser(){
+
+  let completed = localStorage.getItem("survey_completed");
+
+  if(completed){
+
+    let lastDate = new Date(completed);
+    let today = new Date();
+
+    let diff = (today - lastDate) / (1000 * 60 * 60 * 24);
+
+    if(diff < daysLimit){
+
+      window.location.href = fileLink;
+
+    }
+
+  }
+
+}
+
+
+function openForm(){
+
+  localStorage.setItem("survey_completed", new Date());
+
+  window.location.href = formLink;
+
+}
+
+
+checkUser();
+
+</script>
+
+</body>
+</html>
