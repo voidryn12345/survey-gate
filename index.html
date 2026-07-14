@@ -28,7 +28,6 @@ button {
   padding: 15px 35px;
   font-size: 18px;
   border-radius: 8px;
-  cursor: pointer;
 }
 </style>
 
@@ -53,62 +52,61 @@ const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSfMnfkxshEeDFS-l3kaJz
 
 const fileAPI = "https://script.google.com/macros/s/AKfycbwSDrvxaVfmSRf3-dmvTekjjvghJmzIpQ4ZYEQhayhVxTmi7Bi3y3nqIzgiXEjiyVvp/exec";
 
-let fileLink = "";
-
 const daysLimit = 7;
 
 
-// جلب رابط الملف من Google Sheet
+async function startSystem(){
 
-fetch(fileAPI)
-.then(response => response.json())
-.then(data => {
-  fileLink = data.fileLink;
-});
+  let response = await fetch(fileAPI);
+  let data = await response.json();
 
-
-// إذا عاد المستخدم بعد إرسال الفورم
-
-const urlParams = new URLSearchParams(window.location.search);
-
-if (urlParams.get("done") === "true") {
-
-  localStorage.setItem("survey_completed", new Date());
-
-  setTimeout(() => {
-    window.location.href = fileLink;
-  }, 500);
-
-}
+  let fileLink = data.fileLink;
 
 
-// فحص مدة 7 أيام
+  // إذا رجع بعد تعبئة الفورم
+  const params = new URLSearchParams(window.location.search);
 
-let completed = localStorage.getItem("survey_completed");
+  if(params.get("done") === "true"){
 
-if (completed && fileLink) {
-
-  let lastDate = new Date(completed);
-  let now = new Date();
-
-  let diff = (now - lastDate) / (1000 * 60 * 60 * 24);
-
-  if(diff < daysLimit){
+    localStorage.setItem("survey_completed", new Date());
 
     window.location.href = fileLink;
+    return;
+
+  }
+
+
+  // فحص آخر تعبئة
+
+  let completed = localStorage.getItem("survey_completed");
+
+  if(completed){
+
+    let last = new Date(completed);
+    let now = new Date();
+
+    let diff = (now-last)/(1000*60*60*24);
+
+    if(diff < daysLimit){
+
+      window.location.href = fileLink;
+      return;
+
+    }
 
   }
 
 }
 
 
-// فتح الاستبيان
-
 function openForm(){
 
   window.location.href = formLink;
 
 }
+
+
+startSystem();
 
 </script>
 
